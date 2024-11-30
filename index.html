@@ -5,20 +5,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        console.log('HTML loaded');
-        window.addEventListener('error', function(e) {
-            console.error('Script error:', e);
-        });
-    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="./script.js"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-gray-100 p-4" onload="console.log('Body loaded')">
+<body class="bg-gray-100 p-4">
     <div class="energy-calculator"></div>
-    <button onclick="console.log('Test button clicked')" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
-        Test Console Log
-    </button>
 </body>
 </html>
