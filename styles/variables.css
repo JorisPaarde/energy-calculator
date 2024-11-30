@@ -1,0 +1,24 @@
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg-input: #f8fafc;
+    --border: #e2e8f0;
+    --border-hover: #94a3b8;
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.07);
+    
+    /* Energy label colors */
+    --label-f: #ef4444;  /* Red */
+    --label-e: #f97316;  /* Orange */
+    --label-d: #f59e0b;  /* Amber */
+    --label-c: #eab308;  /* Yellow */
+    --label-b: #84cc16;  /* Light green */
+    --label-a: #22c55e;  /* Green */
+    --label-aplus: #15803d;  /* Dark green */
+    --label-aplusplus: #166534;  /* Darker green */
+    --label-inactive: #94a3b8;  /* Grey for inactive */
+
+    /* Typography */
+    --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    --text-primary: #1f2937;
+} 
