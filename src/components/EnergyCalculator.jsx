@@ -49,7 +49,7 @@ function EnergyCalculator() {
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center uppercase tracking-wide pb-3">
         Energielabel Calculator
       </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -70,13 +70,7 @@ function EnergyCalculator() {
           </button>
         </div>
       </form>
-      {result && (
-        <EnergyLabel
-          label={result.label}
-          score={result.score}
-          calculations={result.calculations}
-        />
-      )}
+      {result && <EnergyLabel label={result.label} />}
     </div>
   );
 }

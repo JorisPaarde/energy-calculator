@@ -10,7 +10,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    target: 'es2019',
+    target: 'esnext',
     rollupOptions: {
       output: {
         format: 'es'
@@ -18,6 +18,6 @@ export default defineConfig({
     }
   },
   esbuild: {
-    target: 'es2019'
+    target: 'esnext'
   }
 })
