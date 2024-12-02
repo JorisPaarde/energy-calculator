@@ -1,0 +1,50 @@
+/* Energy Label Bars */
+.energy-label-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-left: 50%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.label-bar {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    opacity: 1;
+    transition: all 0.5s ease;
+    cursor: default;
+    margin-left: -50%;
+    background-color: var(--label-inactive);
+    font-family: var(--font-family);
+}
+
+/* Bar widths */
+.label-bar[data-label="F"] { width: 50%; }
+.label-bar[data-label="E"] { width: 57.14%; }
+.label-bar[data-label="D"] { width: 64.28%; }
+.label-bar[data-label="C"] { width: 71.42%; }
+.label-bar[data-label="B"] { width: 78.57%; }
+.label-bar[data-label="A"] { width: 85.71%; }
+.label-bar[data-label="A+"] { width: 92.85%; }
+.label-bar[data-label="A++"] { width: 100%; }
+
+/* Active colors */
+.label-bar.active[data-label="F"] { background-color: var(--label-f); }
+.label-bar.active[data-label="E"] { background-color: var(--label-e); }
+.label-bar.active[data-label="D"] { background-color: var(--label-d); }
+.label-bar.active[data-label="C"] { background-color: var(--label-c); }
+.label-bar.active[data-label="B"] { background-color: var(--label-b); }
+.label-bar.active[data-label="A"] { background-color: var(--label-a); }
+.label-bar.active[data-label="A+"] { background-color: var(--label-aplus); }
+.label-bar.active[data-label="A++"] { background-color: var(--label-aplusplus); }
+
+/* Animation for active state */
+.label-bar.animating {
+    transform: scale(1.02);
+} 

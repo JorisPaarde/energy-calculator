@@ -1,22 +1,23 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/energy-calculator/',
-  plugins: [],
+  plugins: [react()],
   server: {
-    host: '0.0.0.0',
-    hmr: true,
+    port: 3000,
+    open: true
   },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
+    sourcemap: true,
+    target: 'es2019',
     rollupOptions: {
       output: {
-        // Configure both assets and entry chunks
-        assetFileNames: 'assets/[name].[hash][ext]',
-        chunkFileNames: 'assets/[name].[hash].js',
-        entryFileNames: 'assets/[name].[hash].js',
-      },
-    },
+        format: 'es'
+      }
+    }
   },
-});
+  esbuild: {
+    target: 'es2019'
+  }
+})

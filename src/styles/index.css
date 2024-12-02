@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Calculator Container */
+.calculator-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Fields */
+.form-field {
+  margin-bottom: 1.5rem;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Input Fields */
+.select-field,
+.number-field {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 0.375rem;
+  background-color: white;
+}
+
+.select-field:focus,
+.number-field:focus {
+  outline: none;
+  border-color: #3B82F6;
+  ring: 2px;
+  ring-color: #93C5FD;
+}
+
+/* Radio and Checkbox Groups */
+.radio-group,
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.radio-label,
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-input,
+.checkbox-input {
+  margin-right: 0.5rem;
+}
+
+.radio-text,
+.checkbox-text {
+  color: #374151;
+}
+
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #2563EB;
+}
+
+/* Results Container */
+.results-container {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #E5E7EB;
+}
+
+.results-container.hidden {
+  display: none;
+}
+
+.result-content {
+  text-align: center;
+}
+
+.result-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+/* Energy Label Bars */
+.energy-label-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.label-bar {
+  padding: 0.5rem 1rem;
+  background-color: #E5E7EB;
+  color: white;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.label-bar.active {
+  transform: scale(1.05);
+}
+
+.label-bar.active[data-label="A++"] {
+  background-color: #10B981;
+}
+
+.label-bar.active[data-label="A+"] {
+  background-color: #34D399;
+}
+
+.label-bar.active[data-label="A"] {
+  background-color: #6EE7B7;
+}
+
+.label-bar.active[data-label="B"] {
+  background-color: #A7F3D0;
+}
+
+.label-bar.active[data-label="C"] {
+  background-color: #FBBF24;
+}
+
+.label-bar.active[data-label="D"] {
+  background-color: #F59E0B;
+}
+
+.label-bar.active[data-label="E"] {
+  background-color: #EF4444;
+}
+
+.label-bar.active[data-label="F"] {
+  background-color: #DC2626;
+}
+
+.label-bar.animating {
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+} 

@@ -1,0 +1,5 @@
+/* Import all CSS modules */
+@import 'variables.css';
+@import 'layout.css';
+@import 'energy-bars.css';
+@import 'form-inputs.css'; 

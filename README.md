@@ -1,54 +1,8 @@
-# Energy Calculator
+# React + Vite
 
-A web-based tool for calculating energy efficiency labels for buildings.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Prerequisites
+Currently, two official plugins are available:
 
-- [Node.js](https://nodejs.org/) (LTS version recommended)
-- [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) - recommended for version management
-
-## Setup with nvm (recommended)
-
-1. **Install nvm**
-   ```bash
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-   ```
-
-2. **Restart your terminal or run:**
-   ```bash
-   export NVM_DIR="$HOME/.nvm"
-   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-   ```
-
-3. **Install and use the latest LTS version of Node.js:**
-   ```bash
-   nvm install --lts
-   nvm use --lts
-   ```
-
-## Project Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone [repository-url]
-   cd energy-calculator
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-   The application will be available at `http://localhost:5173/energy-calculator/`
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-
-## Project Structure
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
