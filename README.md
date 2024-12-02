@@ -1,27 +1,54 @@
-# HTML, CSS, JS (Auto Refresh)
+# Energy Calculator
 
-This template is a starter for building a website with HTML, CSS and JS, powered by [Vite](https://vitejs.dev/). HTML provides the basic structure, CSS controls formatting, and JavaScript controls the behavior of different elements.
+A web-based tool for calculating energy efficiency labels for buildings.
 
-Hit run to see this project in action. It will auto-refresh as you edit the HTML, CSS and JS files.
+## Prerequisites
 
-## Disable Auto Refresh
+- [Node.js](https://nodejs.org/) (LTS version recommended)
+- [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) - recommended for version management
 
-If you find the auto refresh getting in your way, go to [vite.config.js](./vite.config.js) and update it set `hmr` to false to disable hot module reloading (HMR). The full config will look like this:
+## Setup with nvm (recommended)
 
-```js
-export default defineConfig({
-  plugins: [],
-  server: {
-    host: '0.0.0.0',
-    hmr: false, // Change this line to `false` disable auto-refreshing.
-  }
-})
-```
+1. **Install nvm**
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+   ```
 
-## Packages
+2. **Restart your terminal or run:**
+   ```bash
+   export NVM_DIR="$HOME/.nvm"
+   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+   ```
 
-Because this template uses Vite to build your code, you can add install and use npm packages. Simple open the Packager tool to search and manage your packages.
+3. **Install and use the latest LTS version of Node.js:**
+   ```bash
+   nvm install --lts
+   nvm use --lts
+   ```
 
-## Learn More
+## Project Setup
 
-Check out [the vite docs](https://vitejs.dev) to learn more about configuring a frontend application.
+1. **Clone the repository:**
+   ```bash
+   git clone [repository-url]
+   cd energy-calculator
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   The application will be available at `http://localhost:5173/energy-calculator/`
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+
+## Project Structure
