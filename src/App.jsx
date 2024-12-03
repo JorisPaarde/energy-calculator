@@ -19,14 +19,13 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1 className="app-title">Energie Label Calculator</h1>
       {!showResults ? (
         <EnergyCalculator
           onComplete={handleComplete}
         />
       ) : (
-        <EnergyLabel 
-          label={answers.label} 
+        <EnergyLabel
+          label={answers.label}
           onRestart={handleRestart}
         />
       )}
