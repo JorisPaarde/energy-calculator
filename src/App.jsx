@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './styles/index.css';
 import EnergyCalculator from './components/EnergyCalculator';
+import EnergyLabel from './components/EnergyLabel';
 
 function App() {
+  const [showResults, setShowResults] = React.useState(false);
+  const [answers, setAnswers] = React.useState({});
+
+  const handleComplete = (answers) => {
+    setAnswers(answers);
+    setShowResults(true);
+  };
+
+  const handleRestart = () => {
+    setAnswers({});
+    setShowResults(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <EnergyCalculator />
-      </div>
+    <div className="app-container">
+      <h1 className="app-title">Energie Label Calculator</h1>
+      {!showResults ? (
+        <EnergyCalculator
+          onComplete={handleComplete}
+        />
+      ) : (
+        <EnergyLabel 
+          label={answers.label} 
+          onRestart={handleRestart}
+        />
+      )}
     </div>
   );
 }
