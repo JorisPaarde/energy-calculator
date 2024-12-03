@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { QUESTIONS } from '../utils/questions';
 import { calculateLabel } from '../utils/calculations';
 import FormField from './FormField';
@@ -23,29 +23,55 @@ const PROPERTY_MAP = {
   16: 'smartEnergy'
 };
 
-function EnergyCalculator() {
+function EnergyCalculator({ onComplete }) {
   const [formData, setFormData] = useState({});
-  const [result, setResult] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const isTransitioning = useRef(false);
 
-  const handleInputChange = (questionId, value) => {
+  const handleInputChange = (questionId, value, shouldAdvance = true) => {
     const propertyName = PROPERTY_MAP[questionId];
-    if (!propertyName) return;
+    if (!propertyName || isTransitioning.current) return;
 
     setFormData(prev => ({
       ...prev,
       [propertyName]: value
     }));
+
+    // Only advance automatically for non-multiselect questions
+    if (shouldAdvance && currentStep < QUESTIONS.length - 1) {
+      advanceToNextQuestion();
+    }
+  };
+
+  const advanceToNextQuestion = () => {
+    if (isTransitioning.current) return;
+    
+    isTransitioning.current = true;
+    setIsAnimating(true);
+    
+    setTimeout(() => {
+      setCurrentStep(prev => prev + 1);
+      setIsAnimating(false);
+      
+      setTimeout(() => {
+        isTransitioning.current = false;
+      }, 100);
+    }, 400);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       const result = calculateLabel(formData);
-      setResult(result);
+      onComplete({ ...formData, label: result.label });
     } catch (err) {
       console.error('Error calculating label:', err);
     }
   };
+
+  const currentQuestion = QUESTIONS[currentStep];
+  const isLastQuestion = currentStep === QUESTIONS.length - 1;
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -53,24 +79,40 @@ function EnergyCalculator() {
         Energielabel Calculator
       </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {QUESTIONS.map(question => (
-          <FormField
-            key={question.id}
-            question={question}
-            value={formData[PROPERTY_MAP[question.id]]}
-            onChange={handleInputChange}
-          />
-        ))}
-        <div className="mt-6">
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+        <div className="question-container">
+          <div className="progress-bar">
+            <div 
+              className="progress-fill"
+              style={{ width: `${((currentStep + 1) / QUESTIONS.length) * 100}%` }}
+            />
+          </div>
+          <div className="question-number">
+            Vraag {currentStep + 1} van {QUESTIONS.length}
+          </div>
+          <div 
+            key={currentQuestion.id} 
+            className={`question-animate ${isAnimating ? 'slide-out' : ''}`}
           >
-            Bereken Energielabel
-          </button>
+            <FormField
+              question={currentQuestion}
+              value={formData[PROPERTY_MAP[currentQuestion.id]]}
+              onChange={handleInputChange}
+              onNext={isLastQuestion ? handleSubmit : advanceToNextQuestion}
+              isLastQuestion={isLastQuestion}
+            />
+          </div>
         </div>
+        {currentStep === QUESTIONS.length - 1 && currentQuestion.type !== 'multiselect' && (
+          <div className="mt-6 fade-in">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            >
+              Bereken Energielabel
+            </button>
+          </div>
+        )}
       </form>
-      {result && <EnergyLabel label={result.label} />}
     </div>
   );
 }
