@@ -3,21 +3,21 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 3000,
-    open: true
-  },
   build: {
-    outDir: 'dist',
-    sourcemap: true,
-    target: 'esnext',
+    manifest: true,
     rollupOptions: {
       output: {
-        format: 'es'
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name].[ext]'
       }
-    }
+    },
+    assetsDir: 'assets',
+    sourcemap: true
   },
-  esbuild: {
-    target: 'esnext'
+  server: {
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
   }
 })
