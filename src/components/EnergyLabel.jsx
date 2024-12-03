@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 
-const EnergyLabel = ({ label }) => {
-  const labelOrder = ['F', 'E', 'D', 'C', 'B', 'A', 'A+', 'A++'];
-  const labelIndex = labelOrder.indexOf(label);
+const EnergyLabel = ({ label, onRestart }) => {
+  const labels = ['F', 'E', 'D', 'C', 'B', 'A', 'A+', 'A++'];
+  const labelIndex = labels.indexOf(label);
 
   useEffect(() => {
     // Animate bars sequentially
     const animateBar = (index) => {
       if (index > labelIndex) return;
 
-      const bar = document.querySelector(`.label-bar[data-label="${labelOrder[index]}"]`);
+      const bar = document.querySelector(`.label-bar[data-label="${labels[index]}"]`);
       if (bar) {
         bar.classList.add('active', 'animating');
         
@@ -31,24 +31,28 @@ const EnergyLabel = ({ label }) => {
     setTimeout(() => {
       animateBar(0);
     }, 100);
-  }, [label, labelIndex]);
+  }, [label, labelIndex, labels]);
 
   return (
     <div className="results-container">
-      <div className="result-content">
-        <h3 className="result-title">Resultaat</h3>
-        <div className="energy-label-bars">
-          {labelOrder.map((currentLabel) => (
-            <div
-              key={currentLabel}
-              className="label-bar"
-              data-label={currentLabel}
-            >
-              {currentLabel}
-            </div>
-          ))}
-        </div>
+      <h2 className="result-title">Uw energie label indicatie</h2>
+      <div className="energy-labels">
+        {labels.map((currentLabel) => (
+          <div
+            key={currentLabel}
+            className="label-bar"
+            data-label={currentLabel}
+          >
+            {currentLabel}
+          </div>
+        ))}
       </div>
+      <button 
+        onClick={onRestart}
+        className="restart-button"
+      >
+        Opnieuw beginnen
+      </button>
     </div>
   );
 };
