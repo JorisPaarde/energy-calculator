@@ -3,7 +3,7 @@ import './styles/index.css';
 import EnergyCalculator from './components/EnergyCalculator';
 import EnergyLabel from './components/EnergyLabel';
 
-function App() {
+function App({ clientKey }) {
   const [showResults, setShowResults] = React.useState(false);
   const [answers, setAnswers] = React.useState({});
 
@@ -21,6 +21,7 @@ function App() {
     <div className="app-container">
       {!showResults ? (
         <EnergyCalculator
+          clientKey={clientKey}
           onComplete={handleComplete}
         />
       ) : (

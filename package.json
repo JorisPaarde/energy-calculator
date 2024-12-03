@@ -1,15 +1,17 @@
 {
   "name": "energy-calculator",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:wp": "node scripts/create-wp-plugin.js",
+    "build:all": "npm run build && npm run build:wp"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.7",
@@ -18,9 +20,10 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
+    "archiver": "^6.0.1",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
-    "vite": "^4.5.2"
+    "vite": "^5.0.0"
   }
 }
