@@ -77,6 +77,19 @@ archive.file(join(__dirname, '../energy-calculator.php'), {
 // Create assets directory structure
 const distDir = join(__dirname, '../dist');
 
+// Add initialization script
+const initScript = `
+// Initialize Energy Calculator Widget
+document.addEventListener('DOMContentLoaded', function() {
+  const widgets = document.querySelectorAll('.energy-calculator-widget');
+  widgets.forEach(function(widget) {
+    window.ReactDOM.createRoot(widget).render(
+      window.React.createElement(window.EnergyCalculator.default)
+    );
+  });
+});
+`;
+
 // Add all JS files from dist
 if (fs.existsSync(distDir)) {
   const jsFiles = fs.readdirSync(distDir).filter(file => file.endsWith('.js'));
@@ -84,6 +97,11 @@ if (fs.existsSync(distDir)) {
     archive.file(join(distDir, file), {
       name: `energy-calculator/assets/js/${file}`
     });
+  });
+
+  // Add initialization script
+  archive.append(initScript, { 
+    name: 'energy-calculator/assets/js/init.js' 
   });
 
   // Add all CSS files from dist

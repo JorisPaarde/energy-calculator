@@ -54,6 +54,15 @@ function enqueue_energy_calculator_widget() {
         true
     );
 
+    // Enqueue the initialization script
+    wp_enqueue_script(
+        'energy-calculator-init',
+        plugins_url('assets/js/init.js', __FILE__),
+        array('energy-calculator'),
+        '1.0.10',
+        true
+    );
+
     // Enqueue the widget styles
     wp_enqueue_style(
         'energy-calculator-styles',
@@ -75,11 +84,6 @@ function enqueue_energy_calculator_widget() {
         'energyCalculatorConfig',
         $config
     );
-
-    // Add container div for the widget
-    add_action('wp_footer', function() {
-        echo '<div id="energy-calculator-root"></div>';
-    });
 }
 add_action('wp_enqueue_scripts', 'enqueue_energy_calculator_widget');
 
@@ -277,21 +281,8 @@ function energy_calculator_add_cors_headers() {
 }
 add_action('init', 'energy_calculator_add_cors_headers');
 
-// Shortcode that creates container div
-function energy_calculator_shortcode($atts = []) {
-    $license_key = get_option('energy_calculator_license_key', '');
-    
-    if (empty($license_key) || !energy_calculator_validate_license($license_key)) {
-        return '<p>Please configure a valid license key in the Energy Calculator settings.</p>';
-    }
-
-    $widget_id = 'energy-calculator-widget-' . uniqid();
-    
-    return sprintf(
-        '<div id="%s" data-license-key="%s" data-origin="%s"></div>',
-        esc_attr($widget_id),
-        esc_attr($license_key),
-        esc_attr(site_url())
-    );
+// Add shortcode for the widget
+function energy_calculator_shortcode() {
+    return '<div class="energy-calculator-widget"></div>';
 }
 add_shortcode('energy_calculator', 'energy_calculator_shortcode'); 
