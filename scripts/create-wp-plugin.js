@@ -21,12 +21,12 @@ if (!fs.existsSync(wpDistDir)) {
 
 // Create a write stream for our zip file
 const output = fs.createWriteStream(join(wpDistDir, 'energy-calculator.zip'));
-const publicOutput = fs.createWriteStream(join(publicDir, 'energy-calculator.zip'));
 const archive = archiver('zip', {
   zlib: { level: 9 } // Maximum compression
 });
 
 output.on('close', () => {
+  // Copy to public directory after the zip is created
   fs.copyFileSync(
     join(wpDistDir, 'energy-calculator.zip'),
     join(publicDir, 'energy-calculator.zip')
