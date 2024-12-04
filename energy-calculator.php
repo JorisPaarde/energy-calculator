@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Energy Calculator Widget
  * Description: Energy Label Calculator widget using React
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Your Name
  */
 
@@ -36,7 +36,7 @@ function enqueue_energy_calculator_widget() {
         'energy-calculator',
         'https://energy-calculator-ced.pages.dev/energy-calculator.js',
         array(), // No dependencies needed anymore
-        '1.0.7',
+        '1.0.8',
         true
     );
 
