@@ -17,20 +17,47 @@ const FormField = ({ question, value, onChange, onNext, isLastQuestion }) => {
     onNext();
   };
 
-  if (question.type === 'select') {
+  if (question.type === 'select' || question.type === 'dropdown') {
     return window.React.createElement('div', { className: 'form-field' },
-      window.React.createElement('label', { className: 'question-label' }, question.label),
-      window.React.createElement('select', {
-        value: value || '',
-        onChange: handleChange,
-        className: 'select-input'
-      },
-        window.React.createElement('option', { value: '' }, 'Selecteer een optie'),
+      window.React.createElement('label', { className: 'field-label' }, question.label),
+      window.React.createElement('div', { className: 'custom-select' },
+        window.React.createElement('select', {
+          value: value || '',
+          onChange: handleChange,
+          className: 'select-field'
+        }, [
+          window.React.createElement('option', { value: '' }, 'Selecteer een optie'),
+          ...question.options.map(option =>
+            window.React.createElement('option', {
+              key: option.value,
+              value: option.value
+            }, option.label)
+          )
+        ])
+      )
+    );
+  }
+
+  if (question.type === 'radio') {
+    return window.React.createElement('div', { className: 'form-field' },
+      window.React.createElement('label', { className: 'field-label' }, question.label),
+      window.React.createElement('div', { className: 'radio-group' },
         question.options.map(option =>
-          window.React.createElement('option', {
+          window.React.createElement('label', {
             key: option.value,
-            value: option.value
-          }, option.label)
+            className: 'radio-label'
+          }, [
+            window.React.createElement('input', {
+              key: 'input',
+              type: 'radio',
+              name: 'question-' + question.id,
+              value: option.value,
+              checked: value === option.value,
+              onChange: handleChange,
+              className: 'radio-input'
+            }),
+            window.React.createElement('span', { key: 'text' }, option.label)
+          ])
         )
       )
     );
@@ -40,33 +67,42 @@ const FormField = ({ question, value, onChange, onNext, isLastQuestion }) => {
     const selectedValues = value ? value.split(',') : [];
     
     return window.React.createElement('div', { className: 'form-field' },
-      window.React.createElement('label', { className: 'question-label' }, question.label),
-      window.React.createElement('div', { className: 'multiselect-options' },
+      window.React.createElement('label', { className: 'field-label' }, question.label),
+      window.React.createElement('div', { className: 'checkbox-group' },
         question.options.map(option =>
-          window.React.createElement('button', {
+          window.React.createElement('label', {
             key: option.value,
-            type: 'button',
-            className: `multiselect-option ${selectedValues.includes(option.value) ? 'selected' : ''}`,
-            onClick: () => handleMultiSelect(option.value)
-          }, option.label)
+            className: 'checkbox-label'
+          }, [
+            window.React.createElement('input', {
+              key: 'input',
+              type: 'checkbox',
+              value: option.value,
+              checked: selectedValues.includes(option.value),
+              onChange: () => handleMultiSelect(option.value),
+              className: 'checkbox-input'
+            }),
+            window.React.createElement('span', { key: 'text' }, option.label)
+          ])
         )
       ),
       window.React.createElement('button', {
         type: 'button',
-        className: 'next-button',
+        className: 'submit-button',
         onClick: onNext,
         disabled: !selectedValues.length
       }, isLastQuestion ? 'Bereken Energielabel' : 'Volgende')
     );
   }
 
+  // Default to text/number input
   return window.React.createElement('div', { className: 'form-field' },
-    window.React.createElement('label', { className: 'question-label' }, question.label),
+    window.React.createElement('label', { className: 'field-label' }, question.label),
     window.React.createElement('input', {
-      type: question.type,
+      type: question.type || 'text',
       value: value || '',
       onChange: handleChange,
-      className: 'text-input',
+      className: question.type === 'number' ? 'number-field' : 'text-input',
       placeholder: question.placeholder || ''
     })
   );

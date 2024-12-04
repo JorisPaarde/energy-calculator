@@ -2,160 +2,169 @@
 export const QUESTIONS = [
     {
         id: 1,
-        question: "Wat is het bouwjaar van de woning?",
+        label: "Wat is het bouwjaar van de woning?",
         type: "dropdown",
         options: [
-            "Voor 1945",
-            "1945-1975",
-            "1976-1990",
-            "1991-2000",
-            "2001-2010",
-            "Na 2010"
+            { label: "Voor 1945", value: "voor_1945" },
+            { label: "1945-1975", value: "1945_1975" },
+            { label: "1976-1990", value: "1976_1990" },
+            { label: "1991-2000", value: "1991_2000" },
+            { label: "2001-2010", value: "2001_2010" },
+            { label: "Na 2010", value: "na_2010" }
         ]
     },
     {
         id: 2,
-        question: "Wat is het type woning?",
+        label: "Wat is het type woning?",
         type: "dropdown",
         options: [
-            "Vrijstaand",
-            "Twee-onder-een-kap",
-            "Rijtjeshuis",
-            "Appartement"
+            { label: "Vrijstaand", value: "vrijstaand" },
+            { label: "Twee-onder-een-kap", value: "twee_onder_een_kap" },
+            { label: "Rijtjeshuis", value: "rijtjeshuis" },
+            { label: "Appartement", value: "appartement" }
         ]
     },
     {
         id: 3,
-        question: "Hoeveel m² bedraagt de woonoppervlakte?",
+        label: "Hoeveel m² bedraagt de woonoppervlakte?",
         type: "number",
         placeholder: "Vul het aantal m² in"
     },
     {
         id: 4,
-        question: "Wat voor type beglazing heeft de woning?",
+        label: "Wat voor type beglazing heeft de woning?",
         type: "dropdown",
         options: [
-            "Enkel glas",
-            "Dubbel glas",
-            "HR++ glas",
-            "Triple glas"
+            { label: "Enkel glas", value: "enkel_glas" },
+            { label: "Dubbel glas", value: "dubbel_glas" },
+            { label: "HR++ glas", value: "hr_plus_plus" },
+            { label: "Triple glas", value: "triple_glas" }
         ]
     },
     {
         id: 5,
-        question: "Wat is het type dakisolatie?",
+        label: "Wat is het type dakisolatie?",
         type: "dropdown",
         options: [
-            "Geen",
-            "Matig (Rc < 2,5)",
-            "Goed (Rc ≥ 2,5)"
+            { label: "Geen", value: "geen" },
+            { label: "Matig (Rc < 2,5)", value: "matig" },
+            { label: "Goed (Rc ≥ 2,5)", value: "goed" }
         ]
     },
     {
         id: 6,
-        question: "Wat is het type gevelisolatie?",
+        label: "Wat is het type gevelisolatie?",
         type: "dropdown",
         options: [
-            "Geen",
-            "Matig (Rc < 2,5)",
-            "Goed (Rc ≥ 2,5)"
+            { label: "Geen", value: "geen" },
+            { label: "Matig (Rc < 2,5)", value: "matig" },
+            { label: "Goed (Rc ≥ 2,5)", value: "goed" }
         ]
     },
     {
         id: 7,
-        question: "Is er vloerisolatie aanwezig?",
+        label: "Is er vloerisolatie aanwezig?",
         type: "radio",
-        options: ["Ja", "Nee"]
+        options: [
+            { label: "Ja", value: "ja" },
+            { label: "Nee", value: "nee" }
+        ]
     },
     {
         id: 8,
-        question: "Wat voor soort verwarmingssysteem wordt gebruikt?",
+        label: "Wat voor soort verwarmingssysteem wordt gebruikt?",
         type: "dropdown",
         options: [
-            "CV-ketel",
-            "Warmtepomp",
-            "Stadsverwarming",
-            "Elektrisch",
-            "Moederhaard / Gaskachel"
+            { label: "CV-ketel", value: "cv_ketel" },
+            { label: "Warmtepomp", value: "warmtepomp" },
+            { label: "Stadsverwarming", value: "stadsverwarming" },
+            { label: "Elektrisch", value: "elektrisch" },
+            { label: "Moederhaard / Gaskachel", value: "moederhaard" }
         ]
     },
     {
         id: 9,
-        question: "Wat is het rendement van de verwarmingsinstallatie?",
+        label: "Wat is het rendement van de verwarmingsinstallatie?",
         type: "dropdown",
         options: [
-            "Oud (HR < 85%)",
-            "Modern (HR ≥ 85%)",
-            "Hoog (HR ≥ 95%)"
+            { label: "Oud (HR < 85%)", value: "oud" },
+            { label: "Modern (HR ≥ 85%)", value: "modern" },
+            { label: "Hoog (HR ≥ 95%)", value: "hoog" }
         ]
     },
     {
         id: 10,
-        question: "Welke aanvullende energiesystemen zijn aanwezig?",
+        label: "Welke aanvullende energiesystemen zijn aanwezig?",
         type: "multiselect",
         options: [
-            "Mechanische ventilatie",
-            "Balansventilatie (WTW)",
-            "Zonneboiler",
-            "Warmteterugwinning (WTW)",
-            "Domoticasysteem",
-            "Slimme thermostaat",
-            "Geen"
+            { label: "Mechanische ventilatie", value: "mechanische_ventilatie" },
+            { label: "Balansventilatie (WTW)", value: "balansventilatie" },
+            { label: "Zonneboiler", value: "zonneboiler" },
+            { label: "Warmteterugwinning (WTW)", value: "warmteterugwinning" },
+            { label: "Domoticasysteem", value: "domotica" },
+            { label: "Slimme thermostaat", value: "slimme_thermostaat" },
+            { label: "Geen", value: "geen" }
         ]
     },
     {
         id: 11,
-        question: "Zijn er zonnepanelen aanwezig?",
+        label: "Zijn er zonnepanelen aanwezig?",
         type: "dropdown",
         options: [
-            "Nee",
-            "Ja, 1-3 panelen",
-            "Ja, 4-6 panelen",
-            "Ja, 7-10 panelen",
-            "Ja, meer dan 10 panelen",
+            { label: "Nee", value: "nee" },
+            { label: "Ja, 1-3 panelen", value: "1_3" },
+            { label: "Ja, 4-6 panelen", value: "4_6" },
+            { label: "Ja, 7-10 panelen", value: "7_10" },
+            { label: "Ja, meer dan 10 panelen", value: "10_plus" }
         ]
     },
     {
         id: 12,
-        question: "Hoe wordt warm tapwater opgewekt?",
+        label: "Hoe wordt warm tapwater opgewekt?",
         type: "dropdown",
         options: [
-            "CV-ketel",
-            "Elektrische boiler",
-            "Zonneboiler",
-            "Warmtepompboiler"
+            { label: "CV-ketel", value: "cv_ketel" },
+            { label: "Elektrische boiler", value: "elektrische_boiler" },
+            { label: "Zonneboiler", value: "zonneboiler" },
+            { label: "Warmtepompboiler", value: "warmtepompboiler" }
         ]
-    },
-    {
-        id: 12,
-        question: "Is er een koelinstallatie aanwezig?",
-        type: "radio",
-        options: ["Ja", "Nee"]
     },
     {
         id: 13,
-        question: "Hoe oud is de huidige verwarmingsinstallatie?",
-        type: "dropdown",
+        label: "Is er een koelinstallatie aanwezig?",
+        type: "radio",
         options: [
-            "< 5 jaar",
-            "5-10 jaar",
-            "> 10 jaar"
+            { label: "Ja", value: "ja" },
+            { label: "Nee", value: "nee" }
         ]
     },
     {
         id: 14,
-        question: "Wat is het type ventilatiesysteem?",
+        label: "Hoe oud is de huidige verwarmingsinstallatie?",
         type: "dropdown",
         options: [
-            "Natuurlijke ventilatie",
-            "Mechanische afvoer",
-            "Balansventilatie (WTW)"
+            { label: "< 5 jaar", value: "minder_dan_5" },
+            { label: "5-10 jaar", value: "5_10" },
+            { label: "> 10 jaar", value: "meer_dan_10" }
         ]
     },
     {
         id: 15,
-        question: "Wordt er gebruikgemaakt van slimme energiemanagementsystemen?",
+        label: "Wat is het type ventilatiesysteem?",
+        type: "dropdown",
+        options: [
+            { label: "Natuurlijke ventilatie", value: "natuurlijk" },
+            { label: "Mechanische afvoer", value: "mechanisch" },
+            { label: "Balansventilatie (WTW)", value: "balans" }
+        ]
+    },
+    {
+        id: 16,
+        label: "Wordt er gebruikgemaakt van slimme energiemanagementsystemen?",
         type: "radio",
-        options: ["Ja", "Nee"]
+        options: [
+            { label: "Ja", value: "ja" },
+            { label: "Nee", value: "nee" }
+        ]
     }
 ];

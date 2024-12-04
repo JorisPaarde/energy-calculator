@@ -23,7 +23,7 @@ A WordPress plugin that integrates the Energy Calculator React application using
 ## Development
 
 [Rest of the existing README content...]
-
+diffrent import to debug
 ## Installation
 
 1. Download the plugin files

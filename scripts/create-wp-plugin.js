@@ -77,16 +77,83 @@ archive.file(join(__dirname, '../energy-calculator.php'), {
 // Create assets directory structure
 const distDir = join(__dirname, '../dist');
 
-// Add initialization script
+// Add initialization script with debug logging
 const initScript = `
+// Component debug logging function
+function logComponent(name, component) {
+  console.group('Component: ' + name);
+  console.log('Type:', typeof component);
+  console.log('Value:', component);
+  if (typeof component === 'function') {
+    console.log('Source:', component.toString());
+  }
+  if (component && typeof component === 'object') {
+    console.log('Keys:', Object.keys(component));
+  }
+  console.groupEnd();
+}
+
 // Initialize Energy Calculator Widget
 document.addEventListener('DOMContentLoaded', function() {
-  const widgets = document.querySelectorAll('.energy-calculator-widget');
-  widgets.forEach(function(widget) {
-    window.ReactDOM.createRoot(widget).render(
-      window.React.createElement(window.EnergyCalculator.default)
-    );
-  });
+  console.group('Energy Calculator Components Debug');
+  
+  // Log all components
+  logComponent('window.EnergyCalculator', window.EnergyCalculator);
+  logComponent('window.EnergyCalculator.App', window.EnergyCalculator?.App);
+  logComponent('window.EnergyCalculator.Calculator', window.EnergyCalculator?.Calculator);
+  logComponent('window.EnergyCalculator.EnergyLabel', window.EnergyCalculator?.EnergyLabel);
+  logComponent('window.EnergyCalculator.FormField', window.EnergyCalculator?.FormField);
+  logComponent('window.EnergyCalculator.QUESTIONS', window.EnergyCalculator?.QUESTIONS);
+  logComponent('window.EnergyCalculator.calculateLabel', window.EnergyCalculator?.calculateLabel);
+
+  // Log React setup
+  console.group('React Setup');
+  console.log('React Version:', window.React?.version);
+  console.log('ReactDOM Version:', window.ReactDOM?.version);
+  console.log('React.createElement:', typeof window.React?.createElement);
+  console.log('React.useState:', typeof window.React?.useState);
+  console.groupEnd();
+
+  // Log configuration
+  console.group('Configuration');
+  console.log('energyCalculatorConfig:', window.energyCalculatorConfig);
+  console.groupEnd();
+
+  try {
+    const widgets = document.querySelectorAll('.energy-calculator-widget');
+    console.log('Found widgets:', widgets.length);
+
+    if (!window.EnergyCalculator?.App) {
+      throw new Error(\`App component not found. Available components: \${
+        Object.keys(window.EnergyCalculator || {}).join(', ')
+      }\`);
+    }
+
+    widgets.forEach(function(widget, index) {
+      console.group(\`Mounting widget \${index + 1}\`);
+      try {
+        const root = window.ReactDOM.createRoot(widget);
+        console.log('Root created');
+
+        const app = window.React.createElement(window.EnergyCalculator.App, {
+          key: 'calculator',
+          licenseKey: window.energyCalculatorConfig?.licenseKey
+        });
+        console.log('App element created');
+        
+        root.render(app);
+        console.log('App rendered');
+      } catch (err) {
+        console.error('Widget mounting error:', err);
+        widget.innerHTML = '<div style="color: #f44336; padding: 10px;">Error loading Energy Calculator</div>';
+      }
+      console.groupEnd();
+    });
+  } catch (err) {
+    console.error('Initialization error:', err);
+  }
+
+  console.groupEnd();
 });
 `;
 

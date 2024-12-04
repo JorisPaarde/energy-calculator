@@ -1,20 +1,9 @@
-// Initialize global namespace first
-window.EnergyCalculator = window.EnergyCalculator || {};
-
-// Then do imports
 import './styles/index.css';
 import { QUESTIONS } from './utils/questions';
 import { calculateLabel } from './utils/calculations';
 import FormField from './components/FormField';
 import EnergyLabel from './components/EnergyLabel';
 import EnergyCalculator from './components/EnergyCalculator';
-
-// Add utils to global namespace immediately after imports
-window.EnergyCalculator.QUESTIONS = QUESTIONS;
-window.EnergyCalculator.calculateLabel = calculateLabel;
-window.EnergyCalculator.FormField = FormField;
-window.EnergyCalculator.EnergyLabel = EnergyLabel;
-window.EnergyCalculator.Calculator = EnergyCalculator;
 
 // Create the App component
 const App = ({ licenseKey }) => {
@@ -54,18 +43,24 @@ const App = ({ licenseKey }) => {
 
   return window.React.createElement('div', { className: 'app-container' },
     !showResults
-      ? window.React.createElement(window.EnergyCalculator.Calculator, {
+      ? window.React.createElement(EnergyCalculator, {
           licenseKey: licenseKey,
           onComplete: handleComplete
         })
-      : window.React.createElement(window.EnergyCalculator.EnergyLabel, {
+      : window.React.createElement(EnergyLabel, {
           label: answers.label,
           onRestart: handleRestart
         })
   );
 };
 
-// Register App component last
-window.EnergyCalculator.App = App;
+export { 
+  App,
+  EnergyCalculator,
+  EnergyLabel,
+  FormField,
+  QUESTIONS,
+  calculateLabel
+};
 
 export default App;

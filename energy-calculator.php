@@ -28,42 +28,27 @@ function enqueue_energy_calculator_widget() {
         return;
     }
     
-    // Enqueue React and ReactDOM from CDN
+    // Use development versions of React for full error messages
+    wp_deregister_script('react');
+    wp_deregister_script('react-dom');
+    
     wp_enqueue_script(
         'react',
-        'https://unpkg.com/react@18/umd/react.production.min.js',
+        'https://unpkg.com/react@18.2.0/umd/react.development.js',
         array(),
-        '1.0.10',
-        true
+        '18.2.0',
+        false  // Load in header
     );
 
     wp_enqueue_script(
         'react-dom',
-        'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
+        'https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js',
         array('react'),
-        '1.0.10',
-        true
+        '18.2.0',
+        false  // Load in header
     );
     
-    // Enqueue the widget script from plugin directory
-    wp_enqueue_script(
-        'energy-calculator',
-        plugins_url('assets/js/energy-calculator.js', __FILE__),
-        array('react', 'react-dom'),
-        '1.0.10',
-        true
-    );
-
-    // Enqueue the initialization script
-    wp_enqueue_script(
-        'energy-calculator-init',
-        plugins_url('assets/js/init.js', __FILE__),
-        array('energy-calculator'),
-        '1.0.10',
-        true
-    );
-
-    // Enqueue the widget styles
+    // Enqueue the widget styles first
     wp_enqueue_style(
         'energy-calculator-styles',
         plugins_url('assets/css/style.css', __FILE__),
@@ -71,18 +56,37 @@ function enqueue_energy_calculator_widget() {
         '1.0.10'
     );
 
-    // Pass license key and validation status to JavaScript
+    // Enqueue the main calculator script
+    wp_enqueue_script(
+        'energy-calculator',
+        plugins_url('assets/js/energy-calculator.js', __FILE__),
+        array('react', 'react-dom'),
+        '1.0.10',
+        false  // Load in header to ensure components are available
+    );
+
+    // Pass configuration to JavaScript
     $config = array(
         'licenseKey' => $license_key,
         'isValid' => energy_calculator_validate_license($license_key),
         'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('energy_calculator_verify')
+        'nonce' => wp_create_nonce('energy_calculator_verify'),
+        'debug' => true
     );
     
     wp_localize_script(
         'energy-calculator',
         'energyCalculatorConfig',
         $config
+    );
+
+    // Enqueue the initialization script last
+    wp_enqueue_script(
+        'energy-calculator-init',
+        plugins_url('assets/js/init.js', __FILE__),
+        array('energy-calculator'),
+        '1.0.10',
+        true  // Load in footer
     );
 }
 add_action('wp_enqueue_scripts', 'enqueue_energy_calculator_widget');
