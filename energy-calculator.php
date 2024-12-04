@@ -11,6 +11,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Register settings and add menu on plugin activation
+function energy_calculator_activate() {
+    add_option('energy_calculator_license_key', '');
+}
+register_activation_hook(__FILE__, 'energy_calculator_activate');
+
 function enqueue_energy_calculator_widget() {
     $license_key = get_option('energy_calculator_license_key', '');
     
@@ -64,21 +70,53 @@ add_action('wp_ajax_nopriv_energy_calculator_verify', 'energy_calculator_verify_
 
 // Add admin menu
 function energy_calculator_admin_menu() {
-    add_options_page(
-        'Energy Calculator Settings',
-        'Energy Calculator',
-        'manage_options',
-        'energy-calculator-settings',
-        'energy_calculator_settings_page'
+    add_menu_page(
+        'Energy Calculator Settings', // Page title
+        'Energy Calculator', // Menu title
+        'manage_options', // Capability required
+        'energy-calculator', // Menu slug
+        'energy_calculator_settings_page', // Function to display the page
+        'dashicons-calculator', // Icon
+        30 // Position
     );
 }
 add_action('admin_menu', 'energy_calculator_admin_menu');
 
 // Register settings
 function energy_calculator_register_settings() {
-    register_setting('energy_calculator_options', 'energy_calculator_license_key');
+    register_setting(
+        'energy_calculator_settings', // Option group
+        'energy_calculator_license_key', // Option name
+        array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => ''
+        )
+    );
 }
 add_action('admin_init', 'energy_calculator_register_settings');
+
+// License key validation function
+function energy_calculator_validate_license($key) {
+    // Allow access without license key for mijnenergielabelberekenen.nl
+    $site_url = get_site_url();
+    if (strpos($site_url, 'mijnenergielabelberekenen.nl') !== false) {
+        return true;
+    }
+    
+    if (empty($key)) {
+        return false;
+    }
+    
+    // Key must be exactly 20 characters and start with EC-
+    if (strlen($key) !== 20 || substr($key, 0, 3) !== 'EC-') {
+        return false;
+    }
+    
+    // Add your actual validation logic here
+    // For now, we'll accept any 20-char key starting with EC-
+    return true;
+}
 
 // Create the settings page
 function energy_calculator_settings_page() {
@@ -87,16 +125,18 @@ function energy_calculator_settings_page() {
         return;
     }
 
-    // Save license key if form is submitted
-    if (isset($_POST['energy_calculator_license_key'])) {
+    $site_url = get_site_url();
+    $is_main_site = (strpos($site_url, 'mijnenergielabelberekenen.nl') !== false);
+
+    if (isset($_POST['submit']) && check_admin_referer('energy_calculator_settings')) {
         $license_key = sanitize_text_field($_POST['energy_calculator_license_key']);
-        if (energy_calculator_validate_license($license_key)) {
-            update_option('energy_calculator_license_key', $license_key);
-            $message = 'License key saved successfully.';
-            $type = 'success';
-        } else {
-            $message = 'Invalid license key. Please try again.';
-            $type = 'error';
+        update_option('energy_calculator_license_key', $license_key);
+        $message = 'Settings saved.';
+        $type = 'success';
+        
+        if (!$is_main_site && !energy_calculator_validate_license($license_key)) {
+            $message .= ' However, the license key appears to be invalid.';
+            $type = 'warning';
         }
     }
 
@@ -104,13 +144,21 @@ function energy_calculator_settings_page() {
     ?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-        <?php if (isset($message)): ?>
-            <div class="notice notice-<?php echo $type; ?> is-dismissible">
-                <p><?php echo esc_html($message); ?></p>
-            </div>
-        <?php endif; ?>
         
+        <?php if (isset($message)): ?>
+        <div class="notice notice-<?php echo $type; ?> is-dismissible">
+            <p><?php echo esc_html($message); ?></p>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($is_main_site): ?>
+        <div class="notice notice-info">
+            <p>License key is not required for mijnenergielabelberekenen.nl</p>
+        </div>
+        <?php endif; ?>
+
         <form method="post" action="">
+            <?php wp_nonce_field('energy_calculator_settings'); ?>
             <table class="form-table">
                 <tr>
                     <th scope="row">
@@ -124,40 +172,57 @@ function energy_calculator_settings_page() {
                                class="regular-text"
                                pattern=".{20,20}"
                                title="License key must be exactly 20 characters long"
-                               required>
-                        <p class="description">Enter your 20-character license key</p>
+                               <?php echo $is_main_site ? '' : 'required'; ?>>
+                        <p class="description">
+                            <?php if ($is_main_site): ?>
+                                License key is optional for this domain
+                            <?php else: ?>
+                                Enter your 20-character license key (format: EC-XXXXXXXXXXXXXXXXX)
+                            <?php endif; ?>
+                        </p>
+                        <?php if (!$is_main_site && !empty($license_key)): ?>
+                            <p class="description">
+                                License Status: 
+                                <?php if (energy_calculator_validate_license($license_key)): ?>
+                                    <span style="color: green;">Valid</span>
+                                <?php else: ?>
+                                    <span style="color: red;">Invalid</span>
+                                <?php endif; ?>
+                            </p>
+                        <?php endif; ?>
                     </td>
                 </tr>
             </table>
-            <?php submit_button('Save License Key'); ?>
+            <?php submit_button('Save Settings'); ?>
         </form>
+
+        <div class="energy-calculator-info">
+            <h2>Usage Instructions</h2>
+            <p>To display the Energy Calculator on any page or post, use the following shortcode:</p>
+            <code>[energy_calculator]</code>
+            
+            <h3>Requirements</h3>
+            <ul>
+                <?php if (!$is_main_site): ?>
+                <li>Valid license key (format: EC-XXXXXXXXXXXXXXXXX)</li>
+                <?php endif; ?>
+                <li>WordPress 5.0 or higher</li>
+                <li>PHP 7.4 or higher</li>
+            </ul>
+            
+            <h3>Support</h3>
+            <p>For support inquiries <?php echo !$is_main_site ? 'or to purchase a license key, ' : ''; ?>please contact support.</p>
+        </div>
     </div>
     <?php
 }
 
-// License key validation function
-function energy_calculator_validate_license($key) {
-    // For testing purposes, we'll accept keys that are exactly 20 characters
-    // and start with 'EC-'
-    if (strlen($key) !== 20) {
-        return false;
-    }
-    
-    if (substr($key, 0, 3) !== 'EC-') {
-        return false;
-    }
-    
-    // Add your actual validation logic here
-    // For now, we'll accept any 20-char key starting with EC-
-    return true;
-}
-
-// Modify the shortcode to check for valid license
+// Add shortcode support
 function energy_calculator_shortcode($atts = []) {
     $license_key = get_option('energy_calculator_license_key', '');
     
     if (empty($license_key) || !energy_calculator_validate_license($license_key)) {
-        return '<p>Please enter a valid license key in the Energy Calculator settings.</p>';
+        return '<p>Please configure a valid license key in the Energy Calculator settings.</p>';
     }
 
     $widget_id = 'energy-calculator-widget-' . uniqid();
