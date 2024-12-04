@@ -1,9 +1,12 @@
 <?php
 /**
  * Plugin Name: Energy Calculator Widget
- * Description: Energy Label Calculator widget using React
+ * Description: Generate energy label indications for buildings based on user input
  * Version: 1.0.10
- * Author: Your Name
+ * Author: JPwebcreation
+ * Author URI: https://www.jpwebcreation.nl
+ * License: GPL v2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 // Prevent direct access
@@ -42,13 +45,21 @@ function enqueue_energy_calculator_widget() {
         true
     );
     
-    // Enqueue the widget script after React
+    // Enqueue the widget script from plugin directory
     wp_enqueue_script(
         'energy-calculator',
-        'https://energy-calculator-ced.pages.dev/energy-calculator.js',
+        plugins_url('assets/js/energy-calculator.js', __FILE__),
         array('react', 'react-dom'),
         '1.0.10',
         true
+    );
+
+    // Enqueue the widget styles
+    wp_enqueue_style(
+        'energy-calculator-styles',
+        plugins_url('assets/css/style.css', __FILE__),
+        array(),
+        '1.0.10'
     );
 
     // Pass license key and validation status to JavaScript

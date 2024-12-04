@@ -8,11 +8,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/increment-version.js && vite build",
-    "preview": "vite preview",
-    "build:wp": "node scripts/create-wp-plugin.js",
-    "build:all": "npm run build && npm run build:wp",
-    "version:bump": "node scripts/increment-version.js"
+    "build": "vite build",
+    "build:wp": "npm run build && node scripts/create-wp-plugin.js",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.7",

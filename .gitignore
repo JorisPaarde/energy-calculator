@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 dist-wp/
+
+# Keep public/download directory
+!public/
+!public/download/
+!public/download/*
