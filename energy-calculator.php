@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Energy Calculator Widget
  * Description: Energy Label Calculator widget using React
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Your Name
  */
 
@@ -31,53 +31,21 @@ function enqueue_energy_calculator_widget() {
         return;
     }
     
-    // Enqueue React and ReactDOM first
-    wp_enqueue_script(
-        'react',
-        'https://unpkg.com/react@18/umd/react.production.min.js',
-        array(),
-        '18.2.0',
-        true
-    );
-
-    wp_enqueue_script(
-        'react-dom',
-        'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
-        array('react'),
-        '18.2.0',
-        true
-    );
-
-    // Enqueue the React app
+    // Enqueue the self-contained React app
     wp_enqueue_script(
         'energy-calculator',
-        'https://energy-calculator-ced.pages.dev/energy-calculator.umd.js',
-        array('react', 'react-dom'),
-        '1.0.6',
+        'https://energy-calculator-ced.pages.dev/energy-calculator.js',
+        array(), // No dependencies needed anymore
+        '1.0.7',
         true
     );
 
-    // Add crossorigin attribute to script tags
+    // Add defer and async attributes to script tag
     add_filter('script_loader_tag', function($tag, $handle) {
-        if (in_array($handle, ['energy-calculator', 'react', 'react-dom'])) {
-            if (strpos($tag, 'crossorigin') === false) {
-                return str_replace(' src', ' crossorigin="anonymous" src', $tag);
+        if ($handle === 'energy-calculator') {
+            if (strpos($tag, 'defer') === false) {
+                $tag = str_replace(' src', ' defer async src', $tag);
             }
-        }
-        return $tag;
-    }, 10, 2);
-
-    wp_enqueue_style(
-        'energy-calculator-styles',
-        'https://energy-calculator-ced.pages.dev/assets/main.css',
-        array(),
-        '1.0.6'
-    );
-
-    // Add crossorigin attribute to stylesheet
-    add_filter('style_loader_tag', function($tag, $handle) {
-        if ('energy-calculator-styles' === $handle) {
-            return str_replace(' href', ' crossorigin="anonymous" href', $tag);
         }
         return $tag;
     }, 10, 2);
@@ -98,6 +66,11 @@ function enqueue_energy_calculator_widget() {
         'energyCalculatorConfig',
         $config
     );
+
+    // Add container div for the widget
+    add_action('wp_footer', function() {
+        echo '<div id="energy-calculator-root"></div>';
+    });
 }
 add_action('wp_enqueue_scripts', 'enqueue_energy_calculator_widget');
 

@@ -14,20 +14,12 @@ export default defineConfig({
     lib: {
       entry: 'src/main.jsx',
       name: 'EnergyCalculator',
-      formats: ['es', 'umd'],
-      fileName: (format) => `energy-calculator.${format}.js`
+      formats: ['iife'],
+      fileName: () => 'energy-calculator.js'
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
       output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM'
-        },
-        paths: {
-          react: 'https://unpkg.com/react@18/umd/react.production.min.js',
-          'react-dom': 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
-        }
+        inlineDynamicImports: true
       }
     },
     sourcemap: true

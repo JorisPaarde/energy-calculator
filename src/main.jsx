@@ -33,15 +33,14 @@ async function validateLicense() {
   }
 }
 
-// Widget initialization function
-window.initEnergyCalculator = async function(elementId) {
-  const element = document.getElementById(elementId);
+// Initialize a single widget instance
+async function initializeWidget(element) {
   if (!element || element.hasAttribute('data-initialized')) {
     return;
   }
 
   try {
-    // Skip license validation in development
+    // Skip license validation in development or on preview domain
     if (import.meta.env.DEV || window.location.hostname === 'energy-calculator-ced.pages.dev') {
       ReactDOM.createRoot(element).render(
         <React.StrictMode>
@@ -73,19 +72,41 @@ window.initEnergyCalculator = async function(elementId) {
   }
 }
 
-// Auto-initialize in development
-if (import.meta.env.DEV) {
-  document.addEventListener('DOMContentLoaded', () => {
-    window.initEnergyCalculator('energy-calculator-widget');
-  });
-} else {
-  // Production behavior
-  document.addEventListener('DOMContentLoaded', () => {
-    const elements = document.querySelectorAll('[id^="energy-calculator-widget"]');
-    elements.forEach(element => {
-      if (!element.hasAttribute('data-initialized')) {
-        window.initEnergyCalculator(element.id);
-      }
-    });
+// Auto-initialize function for all widget instances
+function initializeAllWidgets() {
+  // Look for both shortcode containers and the root container
+  const elements = [
+    ...document.querySelectorAll('[id^="energy-calculator-widget"]'),
+    document.getElementById('energy-calculator-root')
+  ].filter(Boolean);
+
+  elements.forEach(element => {
+    if (!element.hasAttribute('data-initialized')) {
+      initializeWidget(element);
+    }
   });
 }
+
+// Make initialization function globally available
+window.initEnergyCalculator = initializeWidget;
+
+// Auto-initialize on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeAllWidgets);
+} else {
+  initializeAllWidgets();
+}
+
+// Optional: Re-scan for new widgets periodically (useful for dynamically loaded content)
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.addedNodes.length) {
+      initializeAllWidgets();
+    }
+  });
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
