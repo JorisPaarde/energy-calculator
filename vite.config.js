@@ -5,19 +5,22 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    open: true
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
-    target: 'esnext',
-    rollupOptions: {
-      output: {
-        format: 'es'
-      }
+    open: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
     }
   },
-  esbuild: {
-    target: 'esnext'
-  }
+  build: {
+    manifest: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name].[ext]'
+      }
+    },
+    assetsDir: 'assets',
+    sourcemap: true
+  },
+  publicDir: 'public'
 })

@@ -74,45 +74,47 @@ function EnergyCalculator({ onComplete }) {
   const isLastQuestion = currentStep === QUESTIONS.length - 1;
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center uppercase tracking-wide pb-3">
-        Energielabel Calculator
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="question-container">
-          <div className="progress-bar">
+    <div className="min-h-screen flex items-center justify-center p-2 sm:p-4">
+      <div className="w-full max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center uppercase tracking-wide pb-3">
+          Energielabel Calculator
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="question-container">
+            <div className="progress-bar">
+              <div 
+                className="progress-fill"
+                style={{ width: `${((currentStep + 1) / QUESTIONS.length) * 100}%` }}
+              />
+            </div>
+            <div className="question-number">
+              Vraag {currentStep + 1} van {QUESTIONS.length}
+            </div>
             <div 
-              className="progress-fill"
-              style={{ width: `${((currentStep + 1) / QUESTIONS.length) * 100}%` }}
-            />
-          </div>
-          <div className="question-number">
-            Vraag {currentStep + 1} van {QUESTIONS.length}
-          </div>
-          <div 
-            key={currentQuestion.id} 
-            className={`question-animate ${isAnimating ? 'slide-out' : ''}`}
-          >
-            <FormField
-              question={currentQuestion}
-              value={formData[PROPERTY_MAP[currentQuestion.id]]}
-              onChange={handleInputChange}
-              onNext={isLastQuestion ? handleSubmit : advanceToNextQuestion}
-              isLastQuestion={isLastQuestion}
-            />
-          </div>
-        </div>
-        {currentStep === QUESTIONS.length - 1 && currentQuestion.type !== 'multiselect' && (
-          <div className="mt-6 fade-in">
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              key={currentQuestion.id} 
+              className={`question-animate ${isAnimating ? 'slide-out' : ''}`}
             >
-              Bereken Energielabel
-            </button>
+              <FormField
+                question={currentQuestion}
+                value={formData[PROPERTY_MAP[currentQuestion.id]]}
+                onChange={handleInputChange}
+                onNext={isLastQuestion ? handleSubmit : advanceToNextQuestion}
+                isLastQuestion={isLastQuestion}
+              />
+            </div>
           </div>
-        )}
-      </form>
+          {currentStep === QUESTIONS.length - 1 && currentQuestion.type !== 'multiselect' && (
+            <div className="mt-6 fade-in">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              >
+                Bereken Energielabel
+              </button>
+            </div>
+          )}
+        </form>
+      </div>
     </div>
   );
 }
