@@ -25,7 +25,7 @@ dist-ssr
 
 dist-wp/
 
-# Keep public/download directory
+# Keep public/wp-plugin directory
 !public/
-!public/download/
-!public/download/*
+!public/wp-plugin/
+!public/wp-plugin/*

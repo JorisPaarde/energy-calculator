@@ -13,10 +13,10 @@ if (!fs.existsSync(wpDistDir)) {
   fs.mkdirSync(wpDistDir);
 }
 
-// Ensure public/download directory exists
-const publicDownloadDir = join(__dirname, '../public/download');
-if (!fs.existsSync(publicDownloadDir)) {
-  fs.mkdirSync(publicDownloadDir, { recursive: true });
+// Ensure public/wp-plugin directory exists
+const publicWPDir = join(__dirname, '../public/wp-plugin');
+if (!fs.existsSync(publicWPDir)) {
+  fs.mkdirSync(publicWPDir, { recursive: true });
 }
 
 // Create a write stream for our zip file
@@ -32,18 +32,18 @@ output.on('close', function() {
     console.log(`WordPress plugin zip created in ${wpDistDir}`);
     console.log(`Total bytes: ${archive.pointer()}`);
 
-    // Copy to dist for GitHub Pages
-    const distDir = join(__dirname, '../dist');
-    if (!fs.existsSync(distDir)) {
-      fs.mkdirSync(distDir, { recursive: true });
+    // Copy to dist/wp-plugin for GitHub Pages
+    const distWPDir = join(__dirname, '../dist/wp-plugin');
+    if (!fs.existsSync(distWPDir)) {
+      fs.mkdirSync(distWPDir, { recursive: true });
     }
     
-    fs.copyFileSync(zipPath, join(distDir, 'energy-calculator.zip'));
-    console.log('Copied zip to dist directory');
+    fs.copyFileSync(zipPath, join(distWPDir, 'energy-calculator.zip'));
+    console.log('Copied zip to dist/wp-plugin directory');
     
-    // Copy to public/download for git tracking
-    fs.copyFileSync(zipPath, join(publicDownloadDir, 'energy-calculator.zip'));
-    console.log('Copied zip to public/download directory');
+    // Copy to public/wp-plugin for git tracking
+    fs.copyFileSync(zipPath, join(publicWPDir, 'energy-calculator.zip'));
+    console.log('Copied zip to public/wp-plugin directory');
   } catch (err) {
     console.error('Error copying zip file:', err);
     process.exit(1);
@@ -122,10 +122,13 @@ Created by JPwebcreation (www.jpwebcreation.nl), this calculator offers:
 * Visual representation of the energy label
 * Easy to integrate using shortcode
 
+Download the latest version: [Energy Calculator Plugin](https://energy-calculator-ced.pages.dev/wp-plugin/energy-calculator.zip)
+
 == Installation ==
-1. Upload the plugin files to the /wp-content/plugins/energy-calculator directory
-2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Use the shortcode [energy_calculator] to display the calculator on any page or post
+1. Download the plugin from: https://energy-calculator-ced.pages.dev/wp-plugin/energy-calculator.zip
+2. Upload the plugin files to the /wp-content/plugins/energy-calculator directory
+3. Activate the plugin through the 'Plugins' screen in WordPress
+4. Use the shortcode [energy_calculator] to display the calculator on any page or post
 
 == Frequently Asked Questions ==
 = Is this an official energy label? =
@@ -133,6 +136,10 @@ No, this calculator provides an indication only. For an official energy label, p
 
 = How do I contact the developer? =
 You can reach out to JPwebcreation at www.jpwebcreation.nl
+
+= Where can I download the latest version? =
+You can always download the latest version from:
+https://energy-calculator-ced.pages.dev/wp-plugin/energy-calculator.zip
 
 == Changelog ==
 = ${JSON.parse(fs.readFileSync(join(__dirname, '../package.json'))).version} =
