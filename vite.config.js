@@ -3,13 +3,6 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 3000,
-    open: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    }
-  },
   build: {
     lib: {
       entry: 'src/main.jsx',
@@ -19,10 +12,20 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        inlineDynamicImports: true
-      }
+        inlineDynamicImports: true,
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        }
+      },
+      external: ['react', 'react-dom']
     },
-    sourcemap: true
+    sourcemap: false,
+    minify: true,
+    define: {
+      'process.env': '{}',
+      'import.meta.env': '{}'
+    }
   },
-  publicDir: 'public'
+  publicDir: false
 })
