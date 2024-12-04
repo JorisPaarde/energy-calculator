@@ -14,18 +14,14 @@ export default defineConfig({
       output: {
         inlineDynamicImports: true,
         globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM'
+          'react': 'React',
+          'react-dom/client': 'ReactDOM'
         }
       },
-      external: ['react', 'react-dom']
+      external: ['react', 'react-dom/client']
     },
     sourcemap: false,
-    minify: true,
-    define: {
-      'process.env': '{}',
-      'import.meta.env': '{}'
-    }
+    minify: true
   },
   publicDir: false
 })

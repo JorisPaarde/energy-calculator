@@ -48,9 +48,9 @@ async function initializeWidget(element) {
     }
 
     ReactDOM.createRoot(element).render(
-      <React.StrictMode>
-        <App licenseKey={license.licenseKey} />
-      </React.StrictMode>
+      React.createElement(React.StrictMode, null,
+        React.createElement(App, { licenseKey: license.licenseKey })
+      )
     );
     element.setAttribute('data-initialized', 'true');
   } catch (error) {
