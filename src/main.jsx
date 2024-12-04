@@ -1,36 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
 import App from './App'
-import './index.css'
 
-// License key validation function
-async function validateLicense() {
-  const config = window.energyCalculatorConfig || {};
-  const isDev = window.location.hostname === 'localhost' || 
-                window.location.hostname === '127.0.0.1' ||
-                window.location.hostname === 'energy-calculator-ced.pages.dev';
-
-  // Development mode - always valid
-  if (isDev) {
-    console.log('Development mode - skipping license validation');
-    return { isValid: true, licenseKey: 'DEV-MODE' };
-  }
-
-  // Production mode - must have PHP config
-  if (!config.isValid || !config.licenseKey) {
-    console.error('Production mode requires PHP license validation');
-    return { 
-      isValid: false, 
-      error: 'Invalid license configuration. Please check WordPress settings.' 
-    };
-  }
-
-  // In production, trust PHP validation
-  return { 
-    isValid: true, 
-    licenseKey: config.licenseKey 
-  };
-}
+const isDev = window.location.hostname === 'localhost' || 
+              window.location.hostname === '127.0.0.1' ||
+              window.location.hostname === 'energy-calculator-ced.pages.dev';
 
 // Initialize a single widget instance
 async function initializeWidget(element) {
@@ -39,17 +11,29 @@ async function initializeWidget(element) {
   }
 
   try {
-    const license = await validateLicense();
-    if (!license.isValid) {
+    // In development, skip validation entirely
+    if (isDev) {
+      window.ReactDOM.createRoot(element).render(
+        window.React.createElement(window.React.StrictMode, null,
+          window.React.createElement(App, { licenseKey: 'DEV-MODE' })
+        )
+      );
+      element.setAttribute('data-initialized', 'true');
+      return;
+    }
+
+    // Production mode - must have PHP config
+    const config = window.energyCalculatorConfig || {};
+    if (!config.isValid || !config.licenseKey) {
       element.innerHTML = `<div class="energy-calculator-error">
-        ${license.error || 'Invalid or missing license key. Please check your settings.'}
+        Invalid license configuration. Please check WordPress settings.
       </div>`;
       return;
     }
 
-    ReactDOM.createRoot(element).render(
-      React.createElement(React.StrictMode, null,
-        React.createElement(App, { licenseKey: license.licenseKey })
+    window.ReactDOM.createRoot(element).render(
+      window.React.createElement(window.React.StrictMode, null,
+        window.React.createElement(window.EnergyCalculator.App, { licenseKey: config.licenseKey })
       )
     );
     element.setAttribute('data-initialized', 'true');

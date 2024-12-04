@@ -1,11 +1,9 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react()],
   build: {
     lib: {
-      entry: 'src/main.jsx',
+      entry: 'src/App.jsx',
       name: 'EnergyCalculator',
       formats: ['iife'],
       fileName: () => 'energy-calculator.js'
@@ -13,12 +11,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         inlineDynamicImports: true,
-        globals: {
-          'react': 'React',
-          'react-dom/client': 'ReactDOM'
-        }
-      },
-      external: ['react', 'react-dom/client']
+        extend: true,
+        manualChunks: undefined
+      }
     },
     sourcemap: false,
     minify: true

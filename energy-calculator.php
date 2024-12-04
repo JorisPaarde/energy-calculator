@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Energy Calculator Widget
  * Description: Energy Label Calculator widget using React
- * Version: 1.0.8
+ * Version: 1.0.10
  * Author: Your Name
  */
 
@@ -20,46 +20,44 @@ register_activation_hook(__FILE__, 'energy_calculator_activate');
 function enqueue_energy_calculator_widget() {
     $license_key = get_option('energy_calculator_license_key', '');
     
-    // Debug info
-    error_log('Energy Calculator: Enqueuing scripts');
-    error_log('License key status: ' . ($license_key ? 'Present' : 'Not present'));
-    error_log('License validation: ' . (energy_calculator_validate_license($license_key) ? 'Valid' : 'Invalid'));
-    
     // Only enqueue if we have a valid license
     if (!energy_calculator_validate_license($license_key)) {
-        error_log('Energy Calculator: License validation failed, not enqueuing scripts');
         return;
     }
     
-    // Enqueue the self-contained React app
+    // Enqueue React and ReactDOM from CDN
     wp_enqueue_script(
-        'energy-calculator',
-        'https://energy-calculator-ced.pages.dev/energy-calculator.js',
-        array(), // No dependencies needed anymore
-        '1.0.8',
+        'react',
+        'https://unpkg.com/react@18/umd/react.production.min.js',
+        array(),
+        '1.0.10',
         true
     );
 
-    // Add defer and async attributes to script tag
-    add_filter('script_loader_tag', function($tag, $handle) {
-        if ($handle === 'energy-calculator') {
-            if (strpos($tag, 'defer') === false) {
-                $tag = str_replace(' src', ' defer async src', $tag);
-            }
-        }
-        return $tag;
-    }, 10, 2);
+    wp_enqueue_script(
+        'react-dom',
+        'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
+        array('react'),
+        '1.0.10',
+        true
+    );
+    
+    // Enqueue the widget script after React
+    wp_enqueue_script(
+        'energy-calculator',
+        'https://energy-calculator-ced.pages.dev/energy-calculator.js',
+        array('react', 'react-dom'),
+        '1.0.10',
+        true
+    );
 
     // Pass license key and validation status to JavaScript
     $config = array(
         'licenseKey' => $license_key,
         'isValid' => energy_calculator_validate_license($license_key),
         'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('energy_calculator_verify'),
-        'debug' => true
+        'nonce' => wp_create_nonce('energy_calculator_verify')
     );
-    
-    error_log('Energy Calculator Config: ' . json_encode($config));
     
     wp_localize_script(
         'energy-calculator',
