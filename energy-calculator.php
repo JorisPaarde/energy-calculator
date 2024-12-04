@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Energy Calculator Widget
  * Description: Energy Label Calculator widget using React
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Your Name
  */
 
@@ -25,7 +25,7 @@ function enqueue_energy_calculator_widget() {
         return;
     }
 
-    $version = '1.0.1'; // This will be auto-updated by the version script
+    $version = '1.0.2'; // This will be auto-updated by the version script
     $dev_mode = defined('WP_DEBUG') && WP_DEBUG;
     
     // Base URL for assets
@@ -325,7 +325,7 @@ function energy_calculator_shortcode($atts = []) {
             });
         </script>',
         esc_attr($widget_id),
-        esc_attr(get_option('energy_calculator_version', '1.0.1'))
+        esc_attr(get_option('energy_calculator_version', '1.0.2'))
     );
 }
 add_shortcode('energy_calculator', 'energy_calculator_shortcode'); 

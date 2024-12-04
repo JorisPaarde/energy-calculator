@@ -1,12 +1,13 @@
 /assets/main.js
   Content-Type: application/javascript
-  Access-Control-Allow-Origin: *
 
 /assets/main.css
   Content-Type: text/css
-  Access-Control-Allow-Origin: *
 
 /*
   Access-Control-Allow-Origin: *
   X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff 
+  X-Content-Type-Options: nosniff
+
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
