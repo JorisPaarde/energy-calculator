@@ -11,15 +11,25 @@ export default defineConfig({
     }
   },
   build: {
-    manifest: true,
+    lib: {
+      entry: 'src/main.jsx',
+      name: 'EnergyCalculator',
+      formats: ['es', 'umd'],
+      fileName: (format) => `energy-calculator.${format}.js`
+    },
     rollupOptions: {
+      external: ['react', 'react-dom'],
       output: {
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        },
+        paths: {
+          react: 'https://unpkg.com/react@18/umd/react.production.min.js',
+          'react-dom': 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'
+        }
       }
     },
-    assetsDir: 'assets',
     sourcemap: true
   },
   publicDir: 'public'

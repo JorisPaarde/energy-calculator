@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Energy Calculator Widget
  * Description: Energy Label Calculator widget using React
- * Version: 1.0.4
+ * Version: 1.0.6
  * Author: Your Name
  */
 
@@ -31,19 +31,38 @@ function enqueue_energy_calculator_widget() {
         return;
     }
     
-    // Enqueue the React app from Cloudflare with crossorigin attribute
+    // Enqueue React and ReactDOM first
     wp_enqueue_script(
-        'energy-calculator',
-        'https://energy-calculator-ced.pages.dev/assets/main.js',
+        'react',
+        'https://unpkg.com/react@18/umd/react.production.min.js',
         array(),
-        '1.0.4',
+        '18.2.0',
         true
     );
 
-    // Add crossorigin attribute to script tag
+    wp_enqueue_script(
+        'react-dom',
+        'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
+        array('react'),
+        '18.2.0',
+        true
+    );
+
+    // Enqueue the React app
+    wp_enqueue_script(
+        'energy-calculator',
+        'https://energy-calculator-ced.pages.dev/energy-calculator.umd.js',
+        array('react', 'react-dom'),
+        '1.0.6',
+        true
+    );
+
+    // Add crossorigin attribute to script tags
     add_filter('script_loader_tag', function($tag, $handle) {
-        if ('energy-calculator' === $handle) {
-            return str_replace(' src', ' crossorigin="anonymous" src', $tag);
+        if (in_array($handle, ['energy-calculator', 'react', 'react-dom'])) {
+            if (strpos($tag, 'crossorigin') === false) {
+                return str_replace(' src', ' crossorigin="anonymous" src', $tag);
+            }
         }
         return $tag;
     }, 10, 2);
@@ -52,7 +71,7 @@ function enqueue_energy_calculator_widget() {
         'energy-calculator-styles',
         'https://energy-calculator-ced.pages.dev/assets/main.css',
         array(),
-        '1.0.4'
+        '1.0.6'
     );
 
     // Add crossorigin attribute to stylesheet
