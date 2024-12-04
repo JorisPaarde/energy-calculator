@@ -41,6 +41,18 @@ window.initEnergyCalculator = async function(elementId) {
   }
 
   try {
+    // Skip license validation in development
+    if (import.meta.env.DEV || window.location.hostname === 'energy-calculator-ced.pages.dev') {
+      ReactDOM.createRoot(element).render(
+        <React.StrictMode>
+          <App licenseKey="EC-DEVELOPMENT-KEY-123" />
+        </React.StrictMode>
+      );
+      element.setAttribute('data-initialized', 'true');
+      return;
+    }
+
+    // Production license validation
     const license = await validateLicense();
     if (!license.isValid) {
       element.innerHTML = `<div class="energy-calculator-error">
@@ -64,13 +76,6 @@ window.initEnergyCalculator = async function(elementId) {
 // Auto-initialize in development
 if (import.meta.env.DEV) {
   document.addEventListener('DOMContentLoaded', () => {
-    // Create test config for development
-    window.energyCalculatorConfig = {
-      licenseKey: 'EC-DEVELOPMENT-KEY-123',
-      isValid: true,
-      ajaxUrl: '/mock-ajax',
-      nonce: 'dev-nonce'
-    };
     window.initEnergyCalculator('energy-calculator-widget');
   });
 } else {

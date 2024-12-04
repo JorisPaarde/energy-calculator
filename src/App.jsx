@@ -9,7 +9,12 @@ function App({ licenseKey }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Verify license key on component mount
+    // Skip license validation in development
+    if (import.meta.env.DEV || window.location.hostname === 'energy-calculator-ced.pages.dev') {
+      return;
+    }
+
+    // Verify license key in production
     if (!licenseKey || !licenseKey.startsWith('EC-')) {
       setError('Invalid license key');
     }
