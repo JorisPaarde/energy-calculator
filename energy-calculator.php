@@ -20,64 +20,79 @@ register_activation_hook(__FILE__, 'energy_calculator_activate');
 function enqueue_energy_calculator_widget() {
     $license_key = get_option('energy_calculator_license_key', '');
     
-    // Debug info
-    error_log('Energy Calculator: Enqueuing scripts');
-    error_log('License key status: ' . ($license_key ? 'Present' : 'Not present'));
-    error_log('License validation: ' . (energy_calculator_validate_license($license_key) ? 'Valid' : 'Invalid'));
-    
     // Only enqueue if we have a valid license
     if (!energy_calculator_validate_license($license_key)) {
-        error_log('Energy Calculator: License validation failed, not enqueuing scripts');
         return;
     }
+
+    $version = '1.0.1'; // This will be auto-updated by the version script
+    $dev_mode = defined('WP_DEBUG') && WP_DEBUG;
     
-    // Enqueue the React app from Cloudflare with crossorigin attribute
+    // Base URL for assets
+    $base_url = 'https://energy-calculator-ced.pages.dev';
+    
+    // Add timestamp to bust cache in dev mode
+    $cache_buster = $dev_mode ? '&t=' . time() : '';
+    
+    // Enqueue the React app from Cloudflare with proper MIME type hints
     wp_enqueue_script(
         'energy-calculator',
-        'https://energy-calculator-ced.pages.dev/assets/main.js',
+        $base_url . '/assets/main.js?v=' . $version . $cache_buster,
         array(),
-        '1.0.1',
+        $version,
         true
     );
 
-    // Add crossorigin attribute to script tag
-    add_filter('script_loader_tag', function($tag, $handle) {
-        if ('energy-calculator' === $handle) {
-            return str_replace(' src', ' crossorigin="anonymous" src', $tag);
+    // Add script attributes for better loading
+    add_filter('script_loader_tag', function($tag, $handle) use ($version) {
+        if ('energy-calculator' !== $handle) {
+            return $tag;
         }
-        return $tag;
+        
+        // Add type="module" and crossorigin attributes
+        return str_replace(
+            ' src=',
+            ' type="module" crossorigin="anonymous" src=',
+            $tag
+        );
     }, 10, 2);
 
     wp_enqueue_style(
         'energy-calculator-styles',
-        'https://energy-calculator-ced.pages.dev/assets/main.css',
+        $base_url . '/assets/main.css?v=' . $version . $cache_buster,
         array(),
-        '1.0.1'
+        $version
     );
 
-    // Add crossorigin attribute to stylesheet
+    // Add style attributes
     add_filter('style_loader_tag', function($tag, $handle) {
-        if ('energy-calculator-styles' === $handle) {
-            return str_replace(' href', ' crossorigin="anonymous" href', $tag);
+        if ('energy-calculator-styles' !== $handle) {
+            return $tag;
         }
-        return $tag;
+        
+        // Add crossorigin attribute
+        return str_replace(
+            ' href=',
+            ' crossorigin="anonymous" href=',
+            $tag
+        );
     }, 10, 2);
 
-    // Pass license key and validation status to JavaScript
+    // Pass configuration to JavaScript
     $config = array(
         'licenseKey' => $license_key,
         'isValid' => energy_calculator_validate_license($license_key),
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('energy_calculator_verify'),
-        'debug' => true
+        'debug' => $dev_mode,
+        'version' => $version,
+        'baseUrl' => $base_url
     );
     
-    error_log('Energy Calculator Config: ' . json_encode($config));
-    
-    wp_localize_script(
+    wp_add_inline_script(
         'energy-calculator',
-        'energyCalculatorConfig',
-        $config
+        'window.energyCalculatorConfig = ' . json_encode($config) . ';',
+        'before'
     );
 }
 add_action('wp_enqueue_scripts', 'enqueue_energy_calculator_widget');
@@ -280,41 +295,37 @@ add_action('init', 'energy_calculator_add_cors_headers');
 function energy_calculator_shortcode($atts = []) {
     $license_key = get_option('energy_calculator_license_key', '');
     
-    error_log('Energy Calculator Shortcode: Rendering');
-    error_log('License key status: ' . ($license_key ? 'Present' : 'Not present'));
-    error_log('License validation: ' . (energy_calculator_validate_license($license_key) ? 'Valid' : 'Invalid'));
-    
     if (empty($license_key) || !energy_calculator_validate_license($license_key)) {
-        error_log('Energy Calculator Shortcode: License validation failed');
         return '<p>Please configure a valid license key in the Energy Calculator settings.</p>';
     }
 
     $widget_id = 'energy-calculator-widget-' . uniqid();
     
-    return '<div id="' . esc_attr($widget_id) . '" 
-                 data-license-key="' . esc_attr($license_key) . '" 
-                 data-origin="' . esc_attr(site_url()) . '">
-           </div>
-           <script>
-               console.log("Energy Calculator: Initializing widget", "' . esc_js($widget_id) . '");
-               window.addEventListener("load", function() {
-                   console.log("Energy Calculator: Window loaded");
-                   if (window.initEnergyCalculator) {
-                       console.log("Energy Calculator: initEnergyCalculator function found");
-                       window.initEnergyCalculator("' . esc_js($widget_id) . '");
-                   } else {
-                       console.error("Energy Calculator: initEnergyCalculator function not found");
-                       // Retry loading after a short delay
-                       setTimeout(function() {
-                           if (window.initEnergyCalculator) {
-                               console.log("Energy Calculator: Retry initialization successful");
-                               window.initEnergyCalculator("' . esc_js($widget_id) . '");
-                           } else {
-                               console.error("Energy Calculator: Failed to load after retry");
-                           }
-                       }, 2000);
-                   }
-               });
-           </script>';
+    return sprintf(
+        '<div id="%1$s" class="energy-calculator-widget" data-version="%2$s">
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+        </div>
+        <script>
+            window.addEventListener("load", function() {
+                if (window.initEnergyCalculator) {
+                    window.initEnergyCalculator("%1$s");
+                } else {
+                    console.error("Energy Calculator: Failed to load. Retrying...");
+                    // Retry after a delay
+                    setTimeout(function() {
+                        if (window.initEnergyCalculator) {
+                            window.initEnergyCalculator("%1$s");
+                        } else {
+                            console.error("Energy Calculator: Failed to initialize after retry");
+                            document.getElementById("%1$s").innerHTML = 
+                                "<p>Failed to load the Energy Calculator. Please refresh the page.</p>";
+                        }
+                    }, 2000);
+                }
+            });
+        </script>',
+        esc_attr($widget_id),
+        esc_attr(get_option('energy_calculator_version', '1.0.1'))
+    );
 }
 add_shortcode('energy_calculator', 'energy_calculator_shortcode'); 
