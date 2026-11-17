@@ -129,12 +129,12 @@ Stable tag: ${JSON.parse(fs.readFileSync(join(__dirname, '../package.json'))).ve
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Generate energy label indications for buildings based on user input. Created by JPwebcreation (www.jpwebcreation.nl).
+Generate energy label indications for buildings based on user input. Created by JP Web Creation (https://jpwebcreation.nl/).
 
 == Description ==
 The Energy Calculator plugin helps users generate an energy label indication for their building based on various input parameters. This tool provides a quick and easy way to get an indication of a building's energy efficiency rating.
 
-Created by JPwebcreation (www.jpwebcreation.nl), this calculator offers:
+Created by JP Web Creation (https://jpwebcreation.nl/), this calculator offers:
 * Simple and intuitive interface
 * Instant energy label indication
 * Visual representation of the energy label

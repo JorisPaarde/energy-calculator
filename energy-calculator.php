@@ -3,8 +3,8 @@
  * Plugin Name: Energy Calculator Widget
  * Description: Generate energy label indications for buildings based on user input
  * Version: 1.0.10
- * Author: JPwebcreation
- * Author URI: https://www.jpwebcreation.nl
+ * Author: JP Web Creation
+ * Author URI: https://jpwebcreation.nl/
  * License: GPL v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
