@@ -153,7 +153,7 @@ Download the latest version: [Energy Calculator Plugin](https://energy-calculato
 No, this calculator provides an indication only. For an official energy label, please consult an authorized energy advisor.
 
 = How do I contact the developer? =
-You can reach out to JPwebcreation at www.jpwebcreation.nl
+You can reach out to JP Web Creation at https://jpwebcreation.nl/
 
 = Where can I download the latest version? =
 You can always download the latest version from:
@@ -164,7 +164,7 @@ https://energy-calculator-ced.pages.dev/wp-plugin/energy-calculator.zip
 * Initial release of the Energy Label Calculator
 
 == Credits ==
-Developed by JPwebcreation (www.jpwebcreation.nl)
+Developed by JP Web Creation (https://jpwebcreation.nl/)
 `;
 
 archive.append(readmeContent, { name: 'energy-calculator/readme.txt' });
